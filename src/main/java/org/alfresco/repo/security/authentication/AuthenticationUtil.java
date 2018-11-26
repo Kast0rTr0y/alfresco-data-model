@@ -593,12 +593,13 @@ public class AuthenticationUtil implements InitializingBean
                 String originalFullAuthUserName = getUserName(originalFullAuthentication);
                 // exclude authentication as System, the System user is a
                 // concept not an entity
-                if (initialized && uid.equals(AuthenticationUtil.getSystemUserName()))
+                if (initialized && (originalFullAuthUserName.equals(AuthenticationUtil.getSystemUserName())))
                 {
-                    AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
+                    originalFullAuthentication = AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
                 }
-                else if (initialized && originalFullAuthUserName.equals(AuthenticationUtil.getSystemUserName()))
+                else if (initialized && isMtEnabled() && originalFullAuthUserName.equals(AuthenticationUtil.defaultAdminUserName))
                 {
+                    //recalculate in case of isMtEnabled
                     originalFullAuthentication = AuthenticationUtil.setAdminUserAsFullyAuthenticatedUser();
                 }
 
